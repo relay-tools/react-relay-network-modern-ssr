@@ -11,7 +11,6 @@ SSR middleware for `react-relay-network-modern` (for Relay Modern)
 Server
 =======
 ```js
-import { graphql } from 'graphql';
 import { RelayNetworkLayer } from 'react-relay-network-modern';
 import RelayServerSSR from 'react-relay-network-modern-ssr/lib/server';
 import schema from './schema';
