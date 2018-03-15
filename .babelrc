@@ -1,0 +1,51 @@
+{
+  "plugins": [
+    "babel-plugin-transform-object-rest-spread",
+    "babel-plugin-transform-flow-strip-types",
+  ],
+  "env": {
+    "lib": {
+      "plugins": [
+        "babel-plugin-transform-class-properties",
+      ],
+      "presets": [
+        ["env", {
+          "targets": {
+            "browsers": [
+              "last 5 versions",
+              "ie 9",
+              "defaults"
+            ]
+          },
+          "include": ["transform-es2015-classes"],
+          "useBuiltIns": true
+        }]
+      ]
+    },
+    "es": {
+      "plugins": [
+        "babel-plugin-transform-class-properties",
+      ]
+    },
+    "node8": {
+      "presets": [
+        ["env", {
+          "targets": {
+            "node": "8.0.0"
+          },
+          "loose": true,
+          "modules": "commonjs"
+        }]
+      ]
+    },
+    "test": {
+      "presets": [
+        ["env", {
+          "targets": {
+            "node": "current"
+          },
+        }]
+      ]
+    }
+  }
+}

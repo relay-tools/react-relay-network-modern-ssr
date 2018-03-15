@@ -1,0 +1,87 @@
+{
+  "name": "react-relay-network-modern-ssr",
+  "version": "0.0.1",
+  "versionS": "0.0.0-semantically-released",
+  "description": "Server side rendering middleware for react-relay-network-modern",
+  "files": [
+    "es",
+    "lib",
+    "node8"
+  ],
+  "main": "lib/index.js",
+  "jsnext:main": "es/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nodkz/react-relay-network-modern-ssr.git"
+  },
+  "keywords": [
+    "relay",
+    "react",
+    "network layer",
+    "ssr",
+    "server side rendering"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nodkz/react-relay-network-modern-ssr/issues"
+  },
+  "homepage": "https://github.com/nodkz/react-relay-network-modern-ssr#readme",
+  "dependencies": {},
+  "peerDependencies": {
+    "react-relay-network-modern": ">=2.1.0",
+    "relay-runtime": ">=1.4.0"
+  },
+  "optionalDependencies": {
+    "graphql": ">=0.11.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.2.2",
+    "babel-jest": "^22.4.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
+    "cz-conventional-changelog": "^2.1.0",
+    "eslint": "^4.18.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-module-utils": "^2.1.1",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-prettier": "^2.6.0",
+    "fetch-mock": "^6.0.1",
+    "flow-bin": "^0.66.0",
+    "form-data": "^2.3.2",
+    "jest": "^22.4.2",
+    "prettier": "^1.11.0",
+    "react-relay-network-modern": "^2.1.0",
+    "relay-runtime": "^1.5.0",
+    "rimraf": "^2.6.2",
+    "semantic-release": "^12.4.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>/src"
+    ]
+  },
+  "scripts": {
+    "build": "npm run build-lib && npm run build-es && npm run build-node8",
+    "build-lib": "rimraf lib && BABEL_ENV=lib babel src --ignore __tests__,__mocks__ -d lib && COPY_TO_FOLDER=lib npm run build-flow",
+    "build-es": "rimraf es && BABEL_ENV=es babel src --ignore __tests__,__mocks__ -d es && COPY_TO_FOLDER=es npm run build-flow",
+    "build-node8": "rimraf node8 && BABEL_ENV=node8 babel src --ignore __tests__,__mocks__ -d node8 && COPY_TO_FOLDER=node8 npm run build-flow",
+    "build-flow": "echo `$1` && find ./src -name '*.js' -not -path '*/__*' | while read filepath; do cp $filepath `echo ./${COPY_TO_FOLDER:-lib}$filepath | sed 's/.\\/src\\//\\//g'`.flow; done",
+    "lint": "eslint src test *.js",
+    "coverage": "jest --coverage --maxWorkers 2",
+    "watch": "jest --watch",
+    "flow": "flow",
+    "test": "npm run coverage && npm run lint && npm run flow",
+    "semantic-release": "semantic-release"
+  }
+}
