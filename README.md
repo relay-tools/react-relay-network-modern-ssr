@@ -18,25 +18,42 @@ import schema from './schema';
 const relayServerSSR = new RelayServerSSR();
 
 const network = new RelayNetworkLayer([
+  // There are three possible ways relayServerSSR.getMiddleware() can be used;
+  // choose the one that best matches your context:
+
+  // By default, if called without arguments it will use `fetch` under the hood
+  // to request data. (See https://github.com/nodkz/react-relay-network-modern
+  // for more info)
+  relayServerSSR.getMiddleware(),
+
+  // Or, you can directly pass in a GraphQL schema, which will use `graphql`
+  // from `graphql-js` to request data
   relayServerSSR.getMiddleware({
     schema,
     contextValue: {},
   }),
-  // OR if you need to prepare context in async mode
-  // relayServerSSR.getMiddleware(async () => ({
-  //   schema,
-  //   contextValue: await prepareGraphQLContext(),
-  // })),
+
+  // If you need to prepare context in async mode, `getMiddleware` will also
+  // accept a function:
+  relayServerSSR.getMiddleware(async () => ({
+    schema,
+    contextValue: await prepareGraphQLContext(),
+  })),
 ]);
 
-//  ... first APP render for starting relay queries
-// ReactDOMServer.renderToString(<App />);
+// Once the RelayNetworkLayer is instantiated, two App renders need to be made in
+// order to prepare data for hydration:
 
-const relayData: string = await relayServerSSR.getCache();
+// First, kick off Relay requests with an initial render
+ReactDOMServer.renderToString(<App />);
 
-//  ... second APP render with already loaded payload
-// const appHtml = ReactDOMServer.renderToString(<App />);
-// sendHtml(appHtml, relayData);
+// Second, collect the data
+const relayData = await relayServerSSR.getCache();
+
+// Third, render the app a second time now that the Relay store has been primed
+// and send HTML and bootstrap data to the client for rehydration
+const appHtml = ReactDOMServer.renderToString(<App />);
+sendHtml(appHtml, relayData);
 ```
 
 Client
