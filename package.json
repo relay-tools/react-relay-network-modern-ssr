@@ -26,13 +26,13 @@
     "url": "https://github.com/nodkz/react-relay-network-modern-ssr/issues"
   },
   "homepage": "https://github.com/nodkz/react-relay-network-modern-ssr#readme",
-  "dependencies": {},
+  "dependencies": {
+    "semantic-release-cli": "^4.0.1"
+  },
   "peerDependencies": {
+    "graphql": ">=0.11.0",
     "react-relay-network-modern": ">=2.1.0",
     "relay-runtime": ">=1.4.0"
-  },
-  "optionalDependencies": {
-    "graphql": ">=0.11.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -59,7 +59,7 @@
     "react-relay-network-modern": "^2.1.0",
     "relay-runtime": "^1.5.0",
     "rimraf": "^2.6.2",
-    "semantic-release": "^12.4.1"
+    "semantic-release": "^15.4.2"
   },
   "config": {
     "commitizen": {
@@ -82,7 +82,7 @@
     "coverage": "jest --coverage --maxWorkers 2",
     "watch": "jest --watch",
     "flow": "flow",
-    "test": "npm run coverage && npm run lint && npm run flow",
+    "test": "npm run lint && npm run flow",
     "semantic-release": "semantic-release"
   }
 }
