@@ -10,7 +10,7 @@ node_js:
   - "9"
   - "8"
 script:
-  - yarn run coverage
+  - yarn run test
   - yarn run build
 after_success:
   - 'curl -Lo travis_after_all.py https://git.io/travis_after_all'

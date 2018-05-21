@@ -1,15 +1,15 @@
 {
   "name": "react-relay-network-modern-ssr",
-  "version": "0.0.1",
+  "version": "0.0.0-development",
   "versionS": "0.0.0-semantically-released",
   "description": "Server side rendering middleware for react-relay-network-modern",
   "files": [
-    "es",
+    "mjs",
     "lib",
     "node8"
   ],
   "main": "lib/index.js",
-  "jsnext:main": "es/index.js",
+  "module": "mjs/index.mjs",
   "repository": {
     "type": "git",
     "url": "https://github.com/nodkz/react-relay-network-modern-ssr.git"
@@ -26,13 +26,13 @@
     "url": "https://github.com/nodkz/react-relay-network-modern-ssr/issues"
   },
   "homepage": "https://github.com/nodkz/react-relay-network-modern-ssr#readme",
-  "dependencies": {},
+  "dependencies": {
+    "semantic-release-cli": "^4.0.1"
+  },
   "peerDependencies": {
+    "graphql": ">=0.11.0",
     "react-relay-network-modern": ">=2.1.0",
     "relay-runtime": ">=1.4.0"
-  },
-  "optionalDependencies": {
-    "graphql": ">=0.11.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -54,12 +54,13 @@
     "fetch-mock": "^6.0.1",
     "flow-bin": "^0.66.0",
     "form-data": "^2.3.2",
+    "graphql": "^0.13.2",
     "jest": "^22.4.2",
     "prettier": "^1.11.0",
     "react-relay-network-modern": "^2.1.0",
     "relay-runtime": "^1.5.0",
     "rimraf": "^2.6.2",
-    "semantic-release": "^12.4.1"
+    "semantic-release": "^15.4.2"
   },
   "config": {
     "commitizen": {
@@ -72,16 +73,17 @@
     ]
   },
   "scripts": {
-    "build": "npm run build-lib && npm run build-es && npm run build-node8",
+    "build": "npm run build-lib && npm run build-mjs && npm run build-node8",
     "build-lib": "rimraf lib && BABEL_ENV=lib babel src --ignore __tests__,__mocks__ -d lib && COPY_TO_FOLDER=lib npm run build-flow",
-    "build-es": "rimraf es && BABEL_ENV=es babel src --ignore __tests__,__mocks__ -d es && COPY_TO_FOLDER=es npm run build-flow",
+    "build-mjs": "rimraf mjs && BABEL_ENV=mjs babel src --ignore __tests__,__mocks__ -d mjs && yarn build-mjs-rename && COPY_TO_FOLDER=mjs npm run build-flow",
+    "build-mjs-rename": "find ./mjs -name \"*.js\" -exec bash -c 'mv \"$1\" \"${1%.js}\".mjs' - '{}' \\;",
     "build-node8": "rimraf node8 && BABEL_ENV=node8 babel src --ignore __tests__,__mocks__ -d node8 && COPY_TO_FOLDER=node8 npm run build-flow",
     "build-flow": "echo `$1` && find ./src -name '*.js' -not -path '*/__*' | while read filepath; do cp $filepath `echo ./${COPY_TO_FOLDER:-lib}$filepath | sed 's/.\\/src\\//\\//g'`.flow; done",
     "lint": "eslint src test *.js",
     "coverage": "jest --coverage --maxWorkers 2",
     "watch": "jest --watch",
     "flow": "flow",
-    "test": "npm run coverage && npm run lint && npm run flow",
+    "test": "npm run lint && npm run flow",
     "semantic-release": "semantic-release"
   }
 }
