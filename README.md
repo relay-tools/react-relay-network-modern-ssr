@@ -8,6 +8,10 @@ SSR middleware for `react-relay-network-modern` (for Relay Modern)
 ![FlowType compatible](https://img.shields.io/badge/flowtype-compatible-brightgreen.svg)
 
 
+**For a full examples, see**:
+ - https://github.com/damassi/react-relay-network-modern-ssr-example
+ - https://github.com/damassi/react-relay-network-modern-ssr-todomvc
+
 Server
 =======
 ```js
@@ -51,9 +55,14 @@ ReactDOMServer.renderToString(<App />);
 const relayData = await relayServerSSR.getCache();
 
 // Third, render the app a second time now that the Relay store has been primed
-// and send HTML and bootstrap data to the client for rehydration
-const appHtml = ReactDOMServer.renderToString(<App />);
-sendHtml(appHtml, relayData);
+// and send HTML and bootstrap data to the client for rehydration. (setTimeout is
+// used to ensure that async resolution inside of QueryRenderer completes once
+// data is provided.
+setTimeout(() => {
+  const appHtml = ReactDOMServer.renderToString(<App />);
+  sendHtml(appHtml, relayData);
+}, 0)
+
 ```
 
 Client
@@ -67,8 +76,19 @@ const relayClientSSR = new RelayClientSSR(window.relayData);
 const network = new RelayNetworkLayer([
   relayClientSSR.getMiddleware(),
 ]);
-```
 
+...
+
+ReactDOM.render(
+  <QueryRenderer
+    dataFrom="STORE_THEN_NETWORK" // Required for Relay 1.5
+    environment={environment}
+    ...
+  />,
+  mountPoint
+)
+
+```
 Contribute
 ==========
 I actively welcome pull requests with code and doc fixes.
