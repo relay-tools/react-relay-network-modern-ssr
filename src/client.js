@@ -4,6 +4,10 @@ import type { MiddlewareSync, QueryPayload } from 'react-relay-network-modern/li
 import type { SSRCache } from './server';
 import { getCacheKey } from './utils';
 
+type SSRGraphQLArgs = {|
+  lookup?: boolean,
+|};
+
 export default class RelayClientSSR {
   cache: ?Map<string, QueryPayload>;
   debug: boolean;
@@ -16,7 +20,7 @@ export default class RelayClientSSR {
     }
   }
 
-  getMiddleware(): MiddlewareSync {
+  getMiddleware(args: SSRGraphQLArgs): MiddlewareSync {
     return {
       execute: (operation, variables) => {
         const cache = this.cache;
@@ -26,9 +30,12 @@ export default class RelayClientSSR {
             const payload = cache.get(cacheKey);
             this.log('SSR_CACHE_GET', cacheKey, payload);
 
-            cache.delete(cacheKey);
-            if (cache.size === 0) {
-              this.cache = null;
+            const lookup = args && args.lookup;
+            if (!lookup) {
+              cache.delete(cacheKey);
+              if (cache.size === 0) {
+                this.cache = null;
+              }
             }
 
             return payload;

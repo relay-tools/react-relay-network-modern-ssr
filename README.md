@@ -74,7 +74,11 @@ import RelayClientSSR from 'react-relay-network-modern-ssr/lib/client';
 const relayClientSSR = new RelayClientSSR(window.relayData);
 
 const network = new RelayNetworkLayer([
-  relayClientSSR.getMiddleware(),
+  relayClientSSR.getMiddleware({
+    // Will preserve cache rather than purge after mount. This works great with
+    // cacheMiddleware.
+    lookup: false
+  }),
 ]);
 
 ...
