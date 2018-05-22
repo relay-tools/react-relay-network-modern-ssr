@@ -31,7 +31,7 @@ export default class RelayServerSSR {
   }
 
   getMiddleware(args: SSRGraphQLArgs | (() => Promise<SSRGraphQLArgs>)): Middleware {
-    return () => async (r: any) => {
+    return next => async (r: any) => {
       const req: RelayRequest = r;
       const cacheKey = getCacheKey(req.operation.name, req.variables);
 
@@ -42,17 +42,24 @@ export default class RelayServerSSR {
       }
 
       this.log('Run graphql query', cacheKey);
+
+      const graphqlArgs: SSRGraphQLArgs = isFunction(args) ? await args() : (args: any);
+      const hasSchema = graphqlArgs && graphqlArgs.schema;
       const gqlResponse = new Promise(async (resolve, reject) => {
         setTimeout(() => {
           reject(new Error('RelayRequest timeout'));
         }, 30000);
 
-        const graphqlArgs: SSRGraphQLArgs = isFunction(args) ? await args() : (args: any);
-        const payload = await graphql({
-          ...graphqlArgs,
-          source: req.getQueryString(),
-          variableValues: req.getVariables(),
-        });
+        let payload = null;
+        if (hasSchema) {
+          payload = await graphql({
+            ...graphqlArgs,
+            source: req.getQueryString(),
+            variableValues: req.getVariables(),
+          });
+        } else {
+          payload = await next(r);
+        }
         resolve(payload);
       });
       this.cache.set(cacheKey, gqlResponse);
