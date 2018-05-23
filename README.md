@@ -2,7 +2,7 @@
 
 [![](https://img.shields.io/npm/v/react-relay-network-modern-ssr.svg)](https://www.npmjs.com/package/react-relay-network-modern-ssr)
 [![npm](https://img.shields.io/npm/dt/react-relay-network-modern-ssr.svg)](http://www.npmtrends.com/react-relay-network-modern-ssr)
-[![Travis](https://img.shields.io/travis/nodkz/react-relay-network-modern-ssr.svg?maxAge=2592000)](https://travis-ci.org/nodkz/react-relay-network-modern-ssr)
+[![Travis](https://img.shields.io/travis/relay-tools/react-relay-network-modern-ssr.svg?maxAge=2592000)](https://travis-ci.org/relay-tools/react-relay-network-modern-ssr)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 ![FlowType compatible](https://img.shields.io/badge/flowtype-compatible-brightgreen.svg)
@@ -26,7 +26,7 @@ const network = new RelayNetworkLayer([
   // choose the one that best matches your context:
 
   // By default, if called without arguments it will use `fetch` under the hood
-  // to request data. (See https://github.com/nodkz/react-relay-network-modern
+  // to request data. (See https://github.com/relay-tools/react-relay-network-modern
   // for more info)
   relayServerSSR.getMiddleware(),
 
@@ -96,8 +96,8 @@ ReactDOM.render(
 
 I actively welcome pull requests with code and doc fixes.
 
-[CHANGELOG](https://github.com/nodkz/react-relay-network-modern-ssr/blob/master/CHANGELOG.md)
+[CHANGELOG](https://github.com/relay-tools/react-relay-network-modern-ssr/blob/master/CHANGELOG.md)
 
 # License
 
-[MIT](https://github.com/nodkz/react-relay-network-modern-ssr/blob/master/LICENSE.md)
+[MIT](https://github.com/relay-tools/react-relay-network-modern-ssr/blob/master/LICENSE.md)

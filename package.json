@@ -12,7 +12,7 @@
   "module": "mjs/index.mjs",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nodkz/react-relay-network-modern-ssr.git"
+    "url": "https://github.com/relay-tools/react-relay-network-modern-ssr.git"
   },
   "keywords": [
     "relay",
@@ -21,11 +21,12 @@
     "ssr",
     "server side rendering"
   ],
+  "author": "Pavel Chertorogov @nodkz",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nodkz/react-relay-network-modern-ssr/issues"
+    "url": "https://github.com/relay-tools/react-relay-network-modern-ssr/issues"
   },
-  "homepage": "https://github.com/nodkz/react-relay-network-modern-ssr#readme",
+  "homepage": "https://github.com/relay-tools/react-relay-network-modern-ssr#readme",
   "dependencies": {
     "semantic-release-cli": "^4.0.1"
   },
