@@ -1,4 +1,4 @@
-# SSR middleware for `react-relay-network-modern` (for Relay Modern)
+# SSR middleware for [react-relay-network-modern](https://github.com/relay-tools/react-relay-network-modern-ssr) (for Relay Modern)
 
 [![](https://img.shields.io/npm/v/react-relay-network-modern-ssr.svg)](https://www.npmjs.com/package/react-relay-network-modern-ssr)
 [![npm](https://img.shields.io/npm/dt/react-relay-network-modern-ssr.svg)](http://www.npmtrends.com/react-relay-network-modern-ssr)
