@@ -27,24 +27,22 @@
     "url": "https://github.com/relay-tools/react-relay-network-modern-ssr/issues"
   },
   "homepage": "https://github.com/relay-tools/react-relay-network-modern-ssr#readme",
-  "dependencies": {
-    "semantic-release-cli": "^4.0.1"
-  },
+  "dependencies": {},
   "peerDependencies": {
     "graphql": ">=0.11.0",
     "react-relay-network-modern": ">=2.1.0",
     "relay-runtime": ">=1.4.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
+    "@babel/cli": "^7.0.0-beta.51",
+    "@babel/core": "^7.0.0-beta.51",
+    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.51",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.51",
+    "@babel/plugin-transform-flow-strip-types": "^7.0.0-beta.51",
+    "@babel/preset-env": "^7.0.0-beta.51",
     "babel-eslint": "^8.2.3",
-    "babel-jest": "^22.4.4",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-flow-strip-types": "^6.22.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-jest": "^23.0.1",
     "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-register": "^6.26.0",
     "cz-conventional-changelog": "^2.1.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
@@ -52,16 +50,16 @@
     "eslint-module-utils": "^2.2.0",
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-prettier": "^2.6.0",
-    "fetch-mock": "^6.4.2",
-    "flow-bin": "^0.72.0",
+    "fetch-mock": "^6.4.4",
+    "flow-bin": "^0.74.0",
     "form-data": "^2.3.2",
     "graphql": "^0.13.2",
-    "jest": "^22.4.4",
-    "prettier": "^1.12.1",
-    "react-relay-network-modern": "^2.3.1",
+    "jest": "^23.1.0",
+    "prettier": "^1.13.5",
+    "react-relay-network-modern": "^2.3.3",
     "relay-runtime": "^1.6.0",
     "rimraf": "^2.6.2",
-    "semantic-release": "^15.5.0"
+    "semantic-release": "^15.5.2"
   },
   "config": {
     "commitizen": {
@@ -75,7 +73,7 @@
   },
   "scripts": {
     "build": "npm run build-lib && npm run build-mjs && npm run build-node8",
-    "build-lib": "rimraf lib && BABEL_ENV=lib babel src --ignore __tests__,__mocks__ -d lib && COPY_TO_FOLDER=lib npm run build-flow",
+    "build-lib": "rimraf lib && BABEL_ENV=lib babel src --ignore __tests__,__mocks__ -d lib && BABEL_ENV=lib_server babel src/server.js -d lib && COPY_TO_FOLDER=lib npm run build-flow",
     "build-mjs": "rimraf mjs && BABEL_ENV=mjs babel src --ignore __tests__,__mocks__ -d mjs && yarn build-mjs-rename && COPY_TO_FOLDER=mjs npm run build-flow",
     "build-mjs-rename": "find ./mjs -name \"*.js\" -exec bash -c 'mv \"$1\" \"${1%.js}\".mjs' - '{}' \\;",
     "build-node8": "rimraf node8 && BABEL_ENV=node8 babel src --ignore __tests__,__mocks__ -d node8 && COPY_TO_FOLDER=node8 npm run build-flow",
