@@ -1,11 +1,21 @@
 {
   "plugins": [
     "babel-plugin-transform-object-rest-spread",
-    "babel-plugin-transform-flow-strip-types"
+    "babel-plugin-transform-flow-strip-types",
+    ["transform-inline-environment-variables", {
+      "include": [
+        "BABEL_ENV"
+      ]
+    }],
+    ["minify-dead-code-elimination", {
+      "optimizeRawSize": true
+    }]
   ],
   "env": {
     "lib": {
-      "plugins": ["babel-plugin-transform-class-properties"],
+      "plugins": [
+        "babel-plugin-transform-class-properties"
+      ],
       "presets": [
         [
           "env",
