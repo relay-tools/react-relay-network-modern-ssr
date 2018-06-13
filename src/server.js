@@ -1,9 +1,7 @@
 /* @flow */
-
-import { inspect } from 'util';
-import RelayResponse from 'react-relay-network-modern/lib/RelayResponse';
 import type { Middleware, QueryPayload } from 'react-relay-network-modern/lib/definition';
 import type RelayRequest from 'react-relay-network-modern/lib/RelayRequest';
+import { inspect } from 'util';
 import {
   graphql,
   type GraphQLSchema,
@@ -11,6 +9,19 @@ import {
   type ExecutionResult,
 } from 'graphql'; // eslint-disable-line
 import { getCacheKey, isFunction } from './utils';
+
+let RelayResponse;
+/* eslint-disable global-require */
+if (process.env.BABEL_ENV === 'node8') {
+  RelayResponse = require('react-relay-network-modern/node8/RelayResponse');
+}
+if (process.env.BABEL_ENV === 'lib') {
+  RelayResponse = require('react-relay-network-modern/lib/RelayResponse');
+}
+if (process.env.BABEL_ENV === 'mjs') {
+  RelayResponse = require('react-relay-network-modern/mjs/RelayResponse');
+}
+/* eslint-enable global-require */
 
 type SSRGraphQLArgs = {|
   schema: GraphQLSchema,
