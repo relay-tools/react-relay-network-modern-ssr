@@ -58,6 +58,15 @@ module.exports = {
           },
         ],
       ],
+      plugins: [
+        [
+          'babel-plugin-replace-imports',
+          {
+            test: /react-relay-network-modern\/lib\//i,
+            replacer: 'react-relay-network-modern/node8/',
+          },
+        ],
+      ],
     },
     test: {
       presets: [
