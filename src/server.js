@@ -71,6 +71,13 @@ export default class RelayServerSSR {
   }
 
   async getCache(): Promise<SSRCache> {
+    this.log('Call getCache() method');
+
+    // ensure that async resolution in Routes completes
+    await new Promise(resolve => {
+      setTimeout(resolve, 0);
+    });
+
     const arr = [];
     const keys = Array.from(this.cache.keys());
     for (let i = 0; i < keys.length; i++) {
@@ -78,6 +85,12 @@ export default class RelayServerSSR {
       const payload: any = await this.cache.get(keys[i]);
       arr.push([keys[i], payload]);
     }
+
+    // ensure that async resolution inside of QueryRenderer completes
+    await new Promise(resolve => {
+      setTimeout(resolve, 0);
+    });
+
     this.log('Recieved all payloads', arr.length);
     return arr;
   }

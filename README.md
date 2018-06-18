@@ -9,8 +9,8 @@
 
 **For a full examples, see**:
 
-* https://github.com/damassi/react-relay-network-modern-ssr-example
-* https://github.com/damassi/react-relay-network-modern-ssr-todomvc
+- https://github.com/damassi/react-relay-network-modern-ssr-example
+- https://github.com/damassi/react-relay-network-modern-ssr-todomvc
 
 # Server
 
@@ -51,17 +51,13 @@ const network = new RelayNetworkLayer([
 // First, kick off Relay requests with an initial render
 ReactDOMServer.renderToString(<App />);
 
-// Second, collect the data
+// Second, await while all data were recieved from graphql server
 const relayData = await relayServerSSR.getCache();
 
 // Third, render the app a second time now that the Relay store has been primed
-// and send HTML and bootstrap data to the client for rehydration. (setTimeout is
-// used to ensure that async resolution inside of QueryRenderer completes once
-// data is provided.
-setTimeout(() => {
-  const appHtml = ReactDOMServer.renderToString(<App />);
-  sendHtml(appHtml, relayData);
-}, 0)
+// and send HTML and bootstrap data to the client for rehydration.
+const appHtml = ReactDOMServer.renderToString(<App />);
+sendHtml(appHtml, relayData);
 ```
 
 # Client
