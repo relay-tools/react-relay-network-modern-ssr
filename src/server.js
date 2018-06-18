@@ -84,7 +84,7 @@ export default class RelayServerSSR {
 
   log(...args: any) {
     if (this.debug) {
-      console.log(...args);
+      console.log('[RelayServerSSR]:', ...args);
     }
   }
 }
