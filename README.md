@@ -15,49 +15,88 @@
 # Server
 
 ```js
+import express from 'express';
+import ReactDOMServer from 'react-dom/server';
 import { RelayNetworkLayer } from 'react-relay-network-modern';
 import RelayServerSSR from 'react-relay-network-modern-ssr/lib/server';
+import serialize from 'serialize-javascript';
+import { Environment, RecordSource, Store } from 'relay-runtime';
 import schema from './schema';
 
-const relayServerSSR = new RelayServerSSR();
+const app = express();
 
-const network = new RelayNetworkLayer([
-  // There are three possible ways relayServerSSR.getMiddleware() can be used;
-  // choose the one that best matches your context:
+app.get('/*', async (req, res, next) => {
+  const relayServerSSR = new RelayServerSSR();
 
-  // By default, if called without arguments it will use `fetch` under the hood
-  // to request data. (See https://github.com/relay-tools/react-relay-network-modern
-  // for more info)
-  relayServerSSR.getMiddleware(),
+  const network = new RelayNetworkLayer([
+    // There are three possible ways relayServerSSR.getMiddleware() can be used;
+    // choose the one that best matches your context:
 
-  // Or, you can directly pass in a GraphQL schema, which will use `graphql`
-  // from `graphql-js` to request data
-  relayServerSSR.getMiddleware({
-    schema,
-    contextValue: {},
-  }),
+    // By default, if called without arguments it will use `fetch` under the hood
+    // to request data. (See https://github.com/relay-tools/react-relay-network-modern
+    // for more info)
+    relayServerSSR.getMiddleware(),
 
-  // If you need to prepare context in async mode, `getMiddleware` will also
-  // accept a function:
-  relayServerSSR.getMiddleware(async () => ({
-    schema,
-    contextValue: await prepareGraphQLContext(),
-  })),
-]);
+    // OR, you can directly pass in a GraphQL schema, which will use `graphql`
+    // from `graphql-js` to request data
+    relayServerSSR.getMiddleware({
+      schema,
+      contextValue: {},
+    }),
 
-// Once the RelayNetworkLayer is instantiated, two App renders need to be made in
-// order to prepare data for hydration:
+    // OR, if you need to prepare context in async mode, `getMiddleware` will also
+    // accept a function:
+    relayServerSSR.getMiddleware(async () => ({
+      schema,
+      contextValue: await prepareGraphQLContext(req),
+    })),
+  ]);
+  const source = new RecordSource();
+  const store = new Store(source);
+  const relayEnvironment = new Environment({ network, store });
 
-// First, kick off Relay requests with an initial render
-ReactDOMServer.renderToString(<App />);
+  // Once the RelayEnvironment is instantiated, two App renders need to be made in
+  // order to prepare data for hydration:
 
-// Second, await while all data were recieved from graphql server
-const relayData = await relayServerSSR.getCache();
+  // First, kick off Relay requests with an initial render
+  ReactDOMServer.renderToString(<App relayEnvironment={relayEnvironment} />);
 
-// Third, render the app a second time now that the Relay store has been primed
-// and send HTML and bootstrap data to the client for rehydration.
-const appHtml = ReactDOMServer.renderToString(<App />);
-sendHtml(appHtml, relayData);
+  // Second, await while all data were recieved from graphql server
+  const relayData = await relayServerSSR.getCache();
+
+  // Third, render the app a second time now that the Relay store has been primed
+  // and send HTML and bootstrap data to the client for rehydration.
+  const appHtml = ReactDOMServer.renderToString(<App relayEnvironment={relayEnvironment} />);
+
+  try {
+      res.status(200).send(`
+      <html>
+        <body>
+          <div id="react-root">${appHtml}</div>
+          <script>
+            window.__RELAY_BOOTSTRAP_DATA__ = ${serialize(relayData)};
+          </script>
+          <script src="/assets/bundle.js"></script>
+        </body>
+      </html>
+    `);
+  } catch (error) {
+    console.log('(server.js) Error: ', error);
+    next(error);
+  }
+}
+
+app.listen(3000);
+
+// simple example, how to asynchronously prepare data for GraphQL context
+async function prepareGraphQLContext(req) {
+  const { userToken } = req.cookies;
+  const user = userToken ? (await somehowLoadUser(userToken)) : undefined;
+  return {
+    user,
+    req,
+  }
+}
 ```
 
 # Client
@@ -66,12 +105,11 @@ sendHtml(appHtml, relayData);
 import { RelayNetworkLayer } from 'react-relay-network-modern';
 import RelayClientSSR from 'react-relay-network-modern-ssr/lib/client';
 
-const relayClientSSR = new RelayClientSSR(window.relayData);
+const relayClientSSR = new RelayClientSSR(window.__RELAY_BOOTSTRAP_DATA__);
 
 const network = new RelayNetworkLayer([
   relayClientSSR.getMiddleware({
-    // Will preserve cache rather than purge after mount. This works great with
-    // cacheMiddleware.
+    // Will preserve cache rather than purge after mount.
     lookup: false
   }),
 ]);
@@ -84,8 +122,8 @@ ReactDOM.render(
     environment={environment}
     ...
   />,
-  mountPoint
-)
+  document.getElementById('react-root')
+);
 ```
 
 # Contribute
