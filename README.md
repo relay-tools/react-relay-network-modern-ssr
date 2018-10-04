@@ -20,7 +20,7 @@ import ReactDOMServer from 'react-dom/server';
 import { RelayNetworkLayer } from 'react-relay-network-modern';
 import RelayServerSSR from 'react-relay-network-modern-ssr/lib/server';
 import serialize from 'serialize-javascript';
-import { Environment, RecordSource, Store } from 'relay-runtime';
+import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import schema from './schema';
 
 const app = express();
@@ -66,7 +66,14 @@ app.get('/*', async (req, res, next) => {
 
   // Third, render the app a second time now that the Relay store has been primed
   // and send HTML and bootstrap data to the client for rehydration.
-  const appHtml = ReactDOMServer.renderToString(<App relayEnvironment={relayEnvironment} />);
+  const appHtml = ReactDOMServer.renderToString(
+    <App
+      relayEnvironment={new Environment({
+        network: Network.create(() => relayData[0][1]),
+        store,
+      })}
+    />
+  );
 
   try {
       res.status(200).send(`
