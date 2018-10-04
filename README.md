@@ -66,7 +66,14 @@ app.get('/*', async (req, res, next) => {
 
   // Third, render the app a second time now that the Relay store has been primed
   // and send HTML and bootstrap data to the client for rehydration.
-  const appHtml = ReactDOMServer.renderToString(<App relayEnvironment={relayEnvironment} />);
+  const appHtml = ReactDOMServer.renderToString(
+    <App
+      relayEnvironment={new Environment({
+        network: Network.create(() => relayData[0][1]),
+        store,
+      })}
+    />
+  );
 
   try {
       res.status(200).send(`
