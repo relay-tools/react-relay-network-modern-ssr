@@ -20,7 +20,7 @@ import ReactDOMServer from 'react-dom/server';
 import { RelayNetworkLayer } from 'react-relay-network-modern';
 import RelayServerSSR from 'react-relay-network-modern-ssr/lib/server';
 import serialize from 'serialize-javascript';
-import { Environment, RecordSource, Store } from 'relay-runtime';
+import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import schema from './schema';
 
 const app = express();
