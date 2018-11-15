@@ -51,16 +51,20 @@ export default class RelayServerSSR {
         }, 30000);
 
         let payload = null;
-        if (hasSchema) {
-          payload = await graphql({
-            ...graphqlArgs,
-            source: req.getQueryString(),
-            variableValues: req.getVariables(),
-          });
-        } else {
-          payload = await next(r);
+        try {
+          if (hasSchema) {
+            payload = await graphql({
+              ...graphqlArgs,
+              source: req.getQueryString(),
+              variableValues: req.getVariables(),
+            });
+          } else {
+            payload = await next(r);
+          }
+          resolve(payload);
+        } catch (e) {
+          reject(e);
         }
-        resolve(payload);
       });
       this.cache.set(cacheKey, gqlResponse);
 
