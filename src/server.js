@@ -30,7 +30,7 @@ export default class RelayServerSSR {
     this.cache = new Map();
   }
 
-  getMiddleware(args: SSRGraphQLArgs | (() => Promise<SSRGraphQLArgs>)): Middleware {
+  getMiddleware(args?: SSRGraphQLArgs | (() => Promise<SSRGraphQLArgs>)): Middleware {
     return next => async (r: any) => {
       const req: RelayRequest = r;
       const cacheKey = getCacheKey(req.operation.name, req.variables);
