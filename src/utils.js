@@ -1,7 +1,7 @@
 /* @flow */
 /* eslint-disable  */
 
-type valueType = string | Object | string[] | Object[];
+type valueType = string | Object | valueType[];
 
 export function isFunction(obj: any): boolean %checks {
   return !!(obj && obj.constructor && obj.call && obj.apply);
