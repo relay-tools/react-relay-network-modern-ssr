@@ -46,7 +46,7 @@ export default class RelayServerSSR {
       const graphqlArgs: SSRGraphQLArgs = isFunction(args) ? await args() : (args: any);
       const hasSchema = graphqlArgs && graphqlArgs.schema;
       const gqlResponse = new Promise(async (resolve, reject) => {
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
           reject(new Error('RelayRequest timeout'));
         }, 30000);
 
@@ -61,8 +61,11 @@ export default class RelayServerSSR {
           } else {
             payload = await next(r);
           }
+
+          clearTimeout(timeout);
           resolve(payload);
         } catch (e) {
+          clearTimeout(timeout);
           reject(e);
         }
       });
