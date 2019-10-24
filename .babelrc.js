@@ -1,84 +1,69 @@
 module.exports = {
   plugins: [
-    '@babel/plugin-proposal-object-rest-spread',
-    '@babel/plugin-transform-flow-strip-types',
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-transform-flow-strip-types"
   ],
   env: {
     lib: {
-      plugins: ['@babel/plugin-proposal-class-properties'],
+      plugins: ["@babel/plugin-proposal-class-properties"],
       presets: [
         [
-          '@babel/preset-env',
+          "@babel/preset-env",
           {
             targets: {
-              browsers: ['last 5 versions', 'ie 9', 'defaults'],
-            },
-          },
-        ],
-      ],
+              browsers: ["last 5 versions", "ie 9", "defaults"]
+            }
+          }
+        ]
+      ]
     },
     lib_server: {
-      plugins: ['@babel/plugin-proposal-class-properties'],
+      plugins: ["@babel/plugin-proposal-class-properties"],
       presets: [
         [
-          '@babel/preset-env',
+          "@babel/preset-env",
           {
             targets: {
-              node: 6,
-            },
-          },
-        ],
-      ],
-    },
-    mjs: {
-      plugins: ['@babel/plugin-proposal-class-properties'],
-      presets: [
-        [
-          '@babel/preset-env',
-          {
-            targets: {
-              node: 6,
-            },
-            loose: true,
-            modules: false,
-          },
-        ],
-      ],
+              node: 6
+            }
+          }
+        ]
+      ]
     },
     node8: {
       presets: [
         [
-          '@babel/preset-env',
+          "@babel/preset-env",
           {
             targets: {
-              node: '8.0.0',
+              node: "8.0.0"
             },
             loose: true,
-            modules: 'commonjs',
-          },
-        ],
+            modules: "commonjs"
+          }
+        ]
       ],
       plugins: [
         [
-          'babel-plugin-replace-imports',
+          "babel-plugin-replace-imports",
           {
             test: /react-relay-network-modern\/lib\//i,
-            replacer: 'react-relay-network-modern/node8/',
-          },
-        ],
-      ],
+            replacer: "react-relay-network-modern/node8/"
+          }
+        ]
+      ]
     },
     test: {
       presets: [
         [
-          '@babel/preset-env',
+          "@babel/preset-env",
           {
             targets: {
-              node: 'current',
-            },
-          },
-        ],
-      ],
-    },
-  },
+              node: "current"
+            }
+          }
+        ]
+      ]
+    }
+  }
 };

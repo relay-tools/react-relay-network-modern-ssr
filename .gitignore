@@ -40,9 +40,8 @@ node_modules
 
 # Transpiled code
 /es
-/lib
 /node8
-/mjs
+/lib
 
 coverage
 .nyc_output
