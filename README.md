@@ -116,8 +116,7 @@ const relayClientSSR = new RelayClientSSR(window.__RELAY_BOOTSTRAP_DATA__);
 
 const network = new RelayNetworkLayer([
   relayClientSSR.getMiddleware({
-    // Will preserve cache rather than purge after mount.
-    lookup: false
+    lookup: true // Will preserve cache rather than purge after mount.
   }),
 ]);
 
