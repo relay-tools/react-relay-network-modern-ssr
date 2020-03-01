@@ -8,6 +8,7 @@
     "node8"
   ],
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/relay-tools/react-relay-network-modern-ssr.git"
@@ -38,6 +39,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
     "@babel/plugin-transform-flow-strip-types": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
+    "@types/graphql": "14.2.3",
     "babel-eslint": "^10.0.2",
     "babel-jest": "^24.8.0",
     "babel-plugin-replace-imports": "^1.0.2",
@@ -58,7 +60,12 @@
     "react-relay-network-modern": "^4.0.1",
     "relay-runtime": "^5.0.0",
     "rimraf": "^2.6.3",
-    "semantic-release": "^15.13.16"
+    "semantic-release": "^15.13.16",
+    "tslint": "^6.0.0",
+    "tslint-config": "^0.0.1",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.1.0",
+    "typescript": "^3.8.3"
   },
   "config": {
     "commitizen": {
@@ -72,10 +79,14 @@
   },
   "scripts": {
     "build": "npm run build-lib && npm run build-node8",
-    "build-lib": "rimraf lib && BABEL_ENV=lib babel src --ignore __tests__,__mocks__ -d lib && BABEL_ENV=lib_server babel src/server.js -d lib && COPY_TO_FOLDER=lib npm run build-flow",
-    "build-node8": "rimraf node8 && BABEL_ENV=node8 babel src --ignore __tests__,__mocks__ -d node8 && COPY_TO_FOLDER=node8 npm run build-flow",
+    "build-lib": "rimraf lib && BABEL_ENV=lib babel src --ignore __tests__,__mocks__ -d lib && BABEL_ENV=lib_server babel src/server.js -d lib && COPY_TO_FOLDER=lib npm run build-flow && COPY_TO_FOLDER=lib npm run build-dts",
+    "build-node8": "rimraf node8 && BABEL_ENV=node8 babel src --ignore __tests__,__mocks__ -d node8 && COPY_TO_FOLDER=node8 npm run build-flow && COPY_TO_FOLDER=node8 npm run build-dts",
     "build-flow": "echo `$1` && find ./src -name '*.js' -not -path '*/__*' | while read filepath; do cp $filepath `echo ./${COPY_TO_FOLDER:-lib}$filepath | sed 's/.\\/src\\//\\//g'`.flow; done",
-    "lint": "eslint 'src/**/*.js'",
+    "build-dts": "echo `$1` && find ./src -name '*d.ts' -not -path '*/__*' | while read filepath; do cp $filepath `echo ./${COPY_TO_FOLDER:-lib}$filepath | sed 's/.\\/src\\//\\//g'`; done",
+    "lint": "npm run eslint && npm run tslint && npm run tscheck",
+    "eslint": "eslint --ext .js ./src",
+    "tslint": "tslint -p . \"src/**/*.d.ts\"",
+    "tscheck": "tsc --noEmit",
     "coverage": "jest --coverage --maxWorkers 2",
     "watch": "jest --watch",
     "flow": "flow",
